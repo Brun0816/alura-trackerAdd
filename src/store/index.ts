@@ -1,41 +1,38 @@
-import IProjeto from "@/interfaces/IProjeto";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
-import { ADICIONA_PROJETO, ALTERA_PROJETO, DEFINIR_PROJETOS, EXCLUIR_PROJETO, NOTIFICAR } from "./tipo-mutacoes";
+import { ADICIONA_TAREFA, ALTERA_TAREFA, DEFINIR_TAREFAS, NOTIFICAR } from "./tipo-mutacoes";
 import { INotificacao } from "@/interfaces/INotificacao";
-import { ALTERAR_PROJETO, CADASTRAR_PROJETOS, OBTER_PROJETOS, REMOVER_PROJETO } from "./tipo-acoes";
+import { ALTERAR_TAREFA, CADASTRAR_TAREFA, OBTER_TAREFAS } from "./tipo-acoes";
 import http from "@/http"
-import Projetos from "@/views/Projetos.vue";
+import ITarefa from "@/interfaces/ITarefa";
+import { EstadoProjeto, projeto } from "./modulos/projeto";
 
-interface Estado {
-    projetos: IProjeto[],
-    notificacoes: INotificacao[]
+export interface Estado {   //usamos o export para transferir/enviar dados de um arquivo para outro
+    tarefas: ITarefa[],
+    notificacoes: INotificacao[],
+    projeto: EstadoProjeto
 }
 
 export const key: InjectionKey<Store<Estado>> = Symbol()
 
 export const store = createStore<Estado>({
     state: {
-        projetos: [],
-        notificacoes: []
+        tarefas: [],
+        notificacoes: [],
+        projeto: {
+            projetos: []
+        }
     },
     mutations: {
-        [ADICIONA_PROJETO](state, nomeDoProjeto: string) {
-            const projeto = {
-                id: new Date().toISOString(),
-                nome: nomeDoProjeto
-            } as IProjeto
-            state.projetos.push(projeto)
+        [DEFINIR_TAREFAS](state, tarefas: ITarefa[]) {
+            state.tarefas = tarefas
         },
-        [ALTERA_PROJETO](state, projeto: IProjeto) {
-            const index = state.projetos.findIndex(proj => proj.id == projeto.id)
-            state.projetos[index] = projeto
+        [ADICIONA_TAREFA](state, tarefa: ITarefa) {
+            state.tarefas.push(tarefa)
         },
-        [EXCLUIR_PROJETO](state, id: string) {
-            state.projetos = state.projetos.filter(proj => proj.id != id)
-        },
-        [DEFINIR_PROJETOS](state, projetos: IProjeto[]) {
-            state.projetos = projetos
+        [ALTERA_TAREFA](state, tarefa: ITarefa) {  //encontramos a tarefas[] no nosso estado local, alteramos ela. Agora oque temos no nosso estado local, representa oque temos na nossa API
+            const index = state.tarefas.findIndex(t => t.id == tarefa.id)
+            state.tarefas[index] = tarefa
         },
         [NOTIFICAR](state, novaNotificacao: INotificacao) {
 
@@ -48,22 +45,24 @@ export const store = createStore<Estado>({
         }
     },
     actions: {
-        [OBTER_PROJETOS]({ commit }) {
-            http.get('projetos')
-                .then(resposta => commit(DEFINIR_PROJETOS, resposta.data))
+        [OBTER_TAREFAS]({ commit }) {
+            http.get('tarefas')
+                .then(resposta => commit(DEFINIR_TAREFAS, resposta.data))
         },
-        [CADASTRAR_PROJETOS](contexto, nomeDoProjeto: string) {
-            return http.post('/projetos', {
-                nome: nomeDoProjeto
-            })
+        [CADASTRAR_TAREFA]({ commit }, tarefa: ITarefa) {
+            return http.post(`/tarefas`, tarefa)
+                .then(resposta => commit(ADICIONA_TAREFA, resposta.data))
         },
-        [ALTERAR_PROJETO](contexto, projeto: IProjeto) {
-            return http.put('/projetos/${projeto.id}', projeto)
+        //usamos o commit para transmitir a mudança != do contexto todo
+        [ALTERAR_TAREFA]({ commit }, tarefa: ITarefa) {
+            return http.put(`/tarefas/${tarefa.id}`, tarefa)
+            .then(() => commit(ALTERAR_TAREFA, tarefa))
+            //o .then representa o "se a nossa tarefa for executada com sucesso", faremos o commit da mutação, ou seja, transmitimos a mudança
+            //esta é uma promessa, oque significa que vai ser alterado se tudo der certo, então devemos encadear no "alterarTarefa" no Tarefas.vue (view)
         },
-        [REMOVER_PROJETO] ({ commit }, id: string) {
-            return http.delete('/projetos/${id}')
-            .then(() => commit(EXCLUIR_PROJETO, id))
-        }
+    },
+    modules: {
+        projeto   //aqui chamamos e avisamos o vue que temos um modulo que necessita ser importado
     }
 })
 

@@ -60,7 +60,7 @@ export default defineComponent({
     setup() {
         const store = useStore(key)
         return {
-            projetos: computed(() => store.state.projetos)
+            projetos: computed(() => store.state.projeto.projetos) //o projeto.projetos acontece pois o projeto é o estado do meu modulo, e projetos é o estado dele em si. Precisa ser evidenciado
         }
     }
 });

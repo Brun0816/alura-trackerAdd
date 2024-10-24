@@ -3,7 +3,11 @@
         <form @submit.prevent="salvar">
             <div class="field">
                 <label for="nomeDoProjeto" class="label"> Nome do Projeto </label>
-                <input type="text" class="input" v-model="nomeDoProjeto" id="nomeDoProjeto" />
+                <input 
+                type="text" 
+                class="input" 
+                v-model="nomeDoProjeto" 
+                id="nomeDoProjeto" />
             </div>
             <div class="field">
                 <button class="button" type="submit">
@@ -18,7 +22,6 @@
 import { defineComponent } from 'vue';
 import { useStore } from '@/store';
 import { TipoNotificacao } from '@/interfaces/INotificacao';
-
 import useNotificador from '@/hooks/notificador'
 import { ALTERAR_PROJETO, CADASTRAR_PROJETOS } from '@/store/tipo-acoes';
 
@@ -30,8 +33,8 @@ export default defineComponent({
         }
     },
     mounted() {
-        if (this.id) {
-            const projeto = this.store.state.projetos.find(proj => proj.id == this.id)
+        if (this.id) {  //o projeto.projetos acontece pois o projeto é o estado do meu modulo, e projetos é o estado dele em si. Precisa ser evidenciado
+            const projeto = this.store.state.projeto.projetos.find(proj => proj.id == this.id)
             this.nomeDoProjeto = projeto?.nome || ''
         }
     },

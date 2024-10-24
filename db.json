@@ -1,20 +1,41 @@
 {
   "projetos": [
     {
-      "id": "1",
-      "nome": "Alura Tracker 3.0"
-    },
-    {
       "id": "fb7d",
       "nome": "ByteBank"
     },
     {
-      "id": "1969",
-      "nome": "teste"
+      "id": "f18a",
+      "nome": "Alura Tracker 3.0"
+    }
+  ],
+  "tarefas": [
+    {
+      "id": "1",
+      "duracaoEmSegundos": 120,
+      "descricao": "configuração do ambiente",
+      "projeto": {
+        "id": 1,
+        "nome": "Alura Tracker 3.0"
+      }
     },
     {
-      "id": "80f8",
-      "nome": "estudos"
+      "id": "c51d",
+      "duracaoEmSegundos": 3,
+      "descricao": "Refatoração Vuex",
+      "projeto": {
+        "id": "f18a",
+        "nome": "Alura Tracker 3.0"
+      }
+    },
+    {
+      "id": "f372",
+      "duracaoEmSegundos": 74,
+      "descricao": "Testando Projetos",
+      "projeto": {
+        "id": "fb7d",
+        "nome": "ByteBank"
+      }
     }
   ]
 }

@@ -7,6 +7,10 @@
     {
       "id": "f18a",
       "nome": "Alura Tracker 3.0"
+    },
+    {
+      "id": "c0df",
+      "nome": "Estudos 2.0"
     }
   ],
   "tarefas": [
@@ -22,7 +26,7 @@
     {
       "id": "c51d",
       "duracaoEmSegundos": 3,
-      "descricao": "Refatoração Vuex",
+      "descricao": "Refatoração Vuex 2.0",
       "projeto": {
         "id": "f18a",
         "nome": "Alura Tracker 3.0"
@@ -31,7 +35,7 @@
     {
       "id": "f372",
       "duracaoEmSegundos": 74,
-      "descricao": "Testando Projetos",
+      "descricao": "Testando Projetos 2.0",
       "projeto": {
         "id": "fb7d",
         "nome": "ByteBank"
